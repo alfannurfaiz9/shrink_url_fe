@@ -38,10 +38,10 @@ const Navbar = () => {
           Login
         </Link>
         <Link
-          to="/auth/logout"
+          to="/auth/register"
           className="bg-primary text-white px-5 py-2 rounded-lg hover:opacity-90 transition-all shadow-sm"
         >
-          Logout
+          Register
         </Link>
       </div>
       <button
@@ -84,10 +84,10 @@ const Navbar = () => {
             Login
           </Link>
           <Link
-            to="/auth/logout"
+            to="/auth/register"
             className="bg-primary text-white px-5 py-2 rounded-lg hover:opacity-90 transition-all shadow-sm"
           >
-            Logout
+            Register
           </Link>
         </div>
       </div>
