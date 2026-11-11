@@ -7,7 +7,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 bg-white shadow-sm flex items-center justify-between px-4 lg:px-8 max-w-360 mx-auto w-full">
+    <header className="z-50 sticky top-0 bg-white shadow-sm flex items-center justify-between px-4 lg:px-8 max-w-360 mx-auto w-full">
       <div className="flex items-center gap-12">
         <Link to="/" className="text-xl font-bold text-gray-900 lg:py-0 py-4">
           ShrinkURL
