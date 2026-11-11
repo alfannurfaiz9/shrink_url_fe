@@ -97,7 +97,10 @@ const UserProfile = () => {
                   </div>
                   <button
                     type="button"
-                    onClick={() => setShowModal(true)}
+                    onClick={() => {
+                      setShowModal(true)
+                      setNotifications(false);
+                    }}
                     className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors cursor-pointer ${
                       notifications ? "bg-primary" : "bg-gray/40"
                     }`}
