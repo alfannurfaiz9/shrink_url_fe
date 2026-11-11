@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { FaShieldAlt, FaPencilAlt, FaLink } from "react-icons/fa";
+import { FaShieldAlt, FaLink } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import avatar from "../../assets/avatar.jpeg";
 
