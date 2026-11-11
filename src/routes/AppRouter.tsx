@@ -5,6 +5,7 @@ import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
 import ProtectedLayout from "../layouts/ProtectedLayout";
 import Dashboard from "../pages/Dashboard";
+import CreateLink from "../pages/CreateLinks";
 
 const AppRouter = () => {
   return (
@@ -21,6 +22,7 @@ const AppRouter = () => {
         <Route path="user" element={<ProtectedLayout />}>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="link" element={<CreateLink />} />
         </Route>
       </Route>
     </Routes>
