@@ -6,6 +6,7 @@ import Login from "../pages/auth/Login";
 import ProtectedLayout from "../layouts/ProtectedLayout";
 import Dashboard from "../pages/Dashboard";
 import CreateLink from "../pages/CreateLinks";
+import NotFound from "../pages/NotFound";
 
 const AppRouter = () => {
   return (
@@ -24,6 +25,8 @@ const AppRouter = () => {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="link" element={<CreateLink />} />
         </Route>
+
+        <Route path="*" index element={<NotFound />} />
       </Route>
     </Routes>
   );
