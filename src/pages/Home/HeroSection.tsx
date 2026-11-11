@@ -2,7 +2,7 @@ import { useState, type SyntheticEvent } from "react";
 import { IoLink } from "react-icons/io5";
 import { Link } from "react-router";
 
-const Hero = () => {
+const HeroSection = () => {
   const [url, setUrl] = useState("");
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
@@ -10,7 +10,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="section-container bg-slate-50/50 py-16 flex flex-col items-center justify-center text-center min-h-dvh">
+    <section className="section-container bg-blue-50/50 py-16 flex flex-col items-center justify-center text-center min-h-dvh">
       <h1 className="text-4xl md:text-5xl font-extrabold text-dark tracking-tight max-w-3xl">
         Shorten URLs. <span className="text-primary">Share Easily.</span>
       </h1>
@@ -58,4 +58,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default HeroSection;
