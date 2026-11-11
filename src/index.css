@@ -28,7 +28,7 @@
     margin: auto;
 
     @media (max-width: 600px) {
-      padding: 52px 24px;
+      padding: 42px 18px;
     }
   }
 }
