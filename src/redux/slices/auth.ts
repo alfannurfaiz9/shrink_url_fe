@@ -1,22 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit"
+import type { AsyncState } from "../initialState"
+import { createAsyncState } from "../initialState";
 
-const initialState = {
+interface IinitialState extends AsyncState {
+  token: string | null;
+}
+
+const initialState: IinitialState = {
     token: null, 
-    isPending: false,
-    isFullfilled: false,
-    isRejected: false,
-    error: null
+    ...createAsyncState()
 }
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    test : () => {
-        console.log("first");
-    }
-  },
+  reducers: {},
 });
 
-export const { test } = authSlice.actions;
 export default authSlice.reducer;
