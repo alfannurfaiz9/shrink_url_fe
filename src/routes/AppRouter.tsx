@@ -7,6 +7,7 @@ import ProtectedLayout from "../layouts/ProtectedLayout";
 import Dashboard from "../pages/Dashboard";
 import CreateLink from "../pages/CreateLinks";
 import NotFound from "../pages/NotFound";
+import UserProfile from "../pages/Profile";
 
 const AppRouter = () => {
   return (
@@ -24,6 +25,7 @@ const AppRouter = () => {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="link" element={<CreateLink />} />
+          <Route path="profile" element={<UserProfile />} />
         </Route>
 
         <Route path="*" index element={<NotFound />} />
