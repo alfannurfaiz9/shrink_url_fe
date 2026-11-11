@@ -85,7 +85,7 @@ const CreateLinkForm = () => {
           }`}
         >
           <div className="bg-gray/10 px-4 py-3 text-dark-gray/60 text-sm font-medium border-r border-gray/20">
-            short.lnk/
+            {`${import.meta.env.VITE_API_URL}/`}
           </div>
           <input
             type="text"
@@ -117,7 +117,7 @@ const CreateLinkForm = () => {
         <p className="text-xs text-dark">
           Your short link will be:
           <span className="font-semibold text-primary">
-            {`https://short.lnk/${customSlug || "random"}`}
+            {`${import.meta.env.VITE_API_URL}/${customSlug || "random"}`}
           </span>
         </p>
       </div>
