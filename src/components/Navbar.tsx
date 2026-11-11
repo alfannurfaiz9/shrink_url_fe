@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router";
-import  {navLinks}  from "../constants/navLinks"; 
+import { navLinks } from "../constants/navLinks";
 import { CgClose, CgMenuRight } from "react-icons/cg";
 
 const Navbar = () => {
@@ -14,22 +14,26 @@ const Navbar = () => {
         </Link>
         <nav className="hidden lg:flex items-center">
           <ul className="flex items-center gap-8 list-none">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <NavLink
-                  to={link.to}
-                  className={({ isActive }) =>
-                    `py-4 border-b-2 transition-colors block ${
-                      isActive
-                        ? "text-primary font-medium border-primary"
-                        : "text-gray-600 hover:text-gray-900 border-transparent"
-                    }`
-                  }
-                >
-                  {link.name}
-                </NavLink>
-              </li>
-            ))}
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <li key={link.name}>
+                  <NavLink
+                    to={link.to}
+                    className={({ isActive }) =>
+                      `py-4 border-b-2 transition-colors flex items-center gap-2 ${
+                        isActive
+                          ? "text-primary font-medium border-primary"
+                          : "text-gray-600 hover:text-gray-900 border-transparent"
+                      }`
+                    }
+                  >
+                    {Icon && <Icon className="text-base" />}
+                    <span>{link.name}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>
@@ -58,22 +62,26 @@ const Navbar = () => {
       >
         <nav>
           <ul className="flex flex-col gap-2 list-none">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <NavLink
-                  to={link.to}
-                  className={({ isActive }) =>
-                    `py-2 border-b border-gray-100 block ${
-                      isActive
-                        ? "text-primary font-medium"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`
-                  }
-                >
-                  {link.name}
-                </NavLink>
-              </li>
-            ))}
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <li key={link.name}>
+                  <NavLink
+                    to={link.to}
+                    className={({ isActive }) =>
+                      `py-2 border-b border-gray-100 flex items-center gap-2.5 ${
+                        isActive
+                          ? "text-primary font-medium"
+                          : "text-gray-600 hover:text-gray-900"
+                      }`
+                    }
+                  >
+                    {Icon && <Icon className="text-base" />}
+                    <span>{link.name}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
           </ul>
         </nav>
         <div className="flex items-center justify-between pt-2">
