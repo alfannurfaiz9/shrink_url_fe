@@ -4,9 +4,9 @@ interface INavLinks {
 }
 
 export const navLinks: INavLinks[] = [
-  { name: "Dashboard", to: "/dashboard" },
-  { name: "Analytics", to: "/analytics" },
-  { name: "Links", to: "/links" },
+  { name: "Dashboard", to: "/user/dashboard" },
+  { name: "Create Link", to: "/user/link" },
+  { name: "Profile", to: "/user/profile" },
 ];
 
 
