@@ -1,13 +1,15 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { FaArrowRight } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import type { RegisterFormInputs } from "./register.types";
 import { useEffect, useState } from "react";
+import { useAppDispatch } from "../../../redux/hooks";
+import {register as registerThunk} from "../../../redux/slices/auth"
+import { toast } from "react-toastify";
+import { upperCaseMessage } from "../../../utils/upperCaseMessage";
 
 const Register = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -16,7 +18,12 @@ const Register = () => {
     formState: { errors },
   } = useForm<RegisterFormInputs>();
 
-  const onSubmit: SubmitHandler<RegisterFormInputs> = (data) => {
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const onSubmit: SubmitHandler<RegisterFormInputs> = async(data) => {
     const { password, confirm_password } = data;
     if (password !== confirm_password) {
       setError("confirm_password", {
@@ -24,6 +31,14 @@ const Register = () => {
         message: "Confirm password doesn't match",
       });
       return;
+    }
+
+    try {
+      const response = await dispatch(registerThunk(data)).unwrap();
+      toast.success(upperCaseMessage(response.message));
+      navigate("/auth/login");
+    } catch (error: any) {
+      toast.error(upperCaseMessage(error));
     }
   };
 
