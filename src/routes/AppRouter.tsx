@@ -8,11 +8,12 @@ import Dashboard from "../pages/Dashboard";
 import CreateLink from "../pages/CreateLinks";
 import NotFound from "../pages/NotFound";
 import UserProfile from "../pages/Profile";
+import AuthLayout from "../layouts/AuthLayout";
 
 const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/auth" element={<MainLayout />}>
+      <Route path="/auth" element={<AuthLayout />}>
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
       </Route>
