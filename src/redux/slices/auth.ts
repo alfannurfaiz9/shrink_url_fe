@@ -3,6 +3,7 @@ import type { AsyncState } from "../initialState"
 import { createAsyncState } from "../initialState";
 import type { ILoginPayload, ILoginResponse, IRegisterPayload, IRegisterResponse } from "../types/auth.types";
 import axios from "axios";
+import { axiosPrivate } from "../../api/axios";
 
 interface IinitialState extends AsyncState {
   token: string | null;
@@ -47,6 +48,22 @@ export const login = createAsyncThunk<
   }
 });
 
+export const logout = createAsyncThunk<any, void, { rejectValue: any }>(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosPrivate.post(`/auth/logout`);
+      return response.data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      }
+
+      return rejectWithValue({ message: "An internal server error occurred." });
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -77,7 +94,7 @@ const authSlice = createSlice({
           state.isRejected = false;
           state.error = null;
         },
-        fulfilled: (state, {payload}) => {
+        fulfilled: (state, { payload }) => {
           state.isPending = false;
           state.isFulfilled = true;
           state.token = payload.result.Token;
@@ -86,6 +103,24 @@ const authSlice = createSlice({
           state.isPending = false;
           state.isRejected = true;
           state.error = payload.message;
+        },
+      })
+      .addAsyncThunk(logout, {
+        pending: (state) => {
+          state.isPending = true;
+          state.isFulfilled = false;
+          state.isRejected = false;
+          state.error = null;
+        },
+        fulfilled: (state) => {
+          state.isPending = false;
+          state.isFulfilled = true;
+          state.token = null;
+        },
+        rejected: (state, { payload }) => {
+          state.isPending = false;
+          state.isRejected = true;
+          state.error = payload;
         },
       });
   },
