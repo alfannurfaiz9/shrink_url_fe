@@ -4,13 +4,13 @@ import { useEffect } from "react"
 
 const ProtectedLayout = () => {
   const navigate = useNavigate()
-  const token = Cookies.get("token")
 
   useEffect(() => {
+    const token = Cookies.get("token");
     if (!token) {
       navigate("/");
     }
-  }, [token, navigate]);
+  }, [navigate]);
 
   return <>{<Outlet />}</>;
 }
