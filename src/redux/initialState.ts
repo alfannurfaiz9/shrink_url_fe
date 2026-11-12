@@ -1,8 +1,8 @@
 export interface AsyncState {
-  isPending: boolean
-  isFulfilled: boolean
-  isRejected: boolean
-  error: string | null
+  isPending: boolean;
+  isFulfilled: boolean;
+  isRejected: boolean;
+  error: any;
 }
 
 export const createAsyncState = (): AsyncState => ({
