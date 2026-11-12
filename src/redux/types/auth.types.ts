@@ -1,4 +1,4 @@
-export interface IAuthResponse {
+export interface IRegisterResponse {
   message: string;
 }
 
@@ -7,6 +7,13 @@ export interface IRegisterPayload {
   full_name: string;
   password: string;
   confirm_password: string;
+}
+
+export interface ILoginResponse {
+  message: string;
+  result: {
+    Token: string;
+  };
 }
 
 export interface ILoginPayload {

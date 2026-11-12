@@ -2,29 +2,59 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { FaArrowRight } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import type { LoginFormInputs } from "./login.types";
 import { useState, useEffect } from "react";
 import FeatureUnavailableModal from "../../../components/FeatureUnavailableModal";
+import { toast } from "react-toastify";
+import { upperCaseMessage } from "../../../utils/upperCaseMessage";
+import { login } from "../../../redux/slices/auth";
+import { useAppDispatch } from "../../../redux/hooks";
+import Cookies from "js-cookie";
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-
   const {
     register,
     handleSubmit,
     clearErrors,
+    setError,
     formState: { errors },
   } = useForm<LoginFormInputs>();
 
-  const [showModal, setShowModal] = useState(false)
-  const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
-    console.log(data);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+    try {
+      const response = await dispatch(login(data)).unwrap();
+      const token = response.result.Token;
+
+      Cookies.set("token", token, {
+        expires: 1,
+        secure: true,
+        sameSite: "Strict",
+      });
+
+      toast.success(upperCaseMessage(response.message));
+      navigate("/user/dashboard");
+    } catch (error: any) {
+      if (error.code === "INVALID_CREDENTIALS") {
+        setError("password", {
+          type: "custom",
+          message: upperCaseMessage(error.message),
+        });
+        return;
+      }
+
+      toast.error(error.message);
+    }
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-  }
+  };
 
   useEffect(() => {
     clearErrors();
