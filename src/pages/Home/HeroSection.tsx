@@ -48,12 +48,12 @@ const HeroSection = () => {
               className="w-full text-dark placeholder:text-dark-gray/40 focus:outline-none text-sm md:text-base"
             />
           </div>
-          <button
-            type="submit"
+          <Link
+            to="/auth/login"
             className="w-full sm:w-auto bg-primary text-white px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-all shadow-sm cursor-pointer"
           >
             Shorten
-          </button>
+          </Link>
         </form>
       </div>
     </section>
