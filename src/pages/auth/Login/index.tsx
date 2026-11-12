@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router";
 import type { LoginFormInputs } from "./login.types";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FeatureUnavailableModal from "../../../components/FeatureUnavailableModal";
 import { toast } from "react-toastify";
 import { upperCaseMessage } from "../../../utils/upperCaseMessage";
