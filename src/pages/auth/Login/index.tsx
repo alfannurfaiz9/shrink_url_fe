@@ -36,7 +36,7 @@ const Login = () => {
         secure: true,
         sameSite: "Strict",
       });
-
+      
       toast.success(upperCaseMessage(response.message));
       navigate("/user/dashboard");
     } catch (error: any) {
