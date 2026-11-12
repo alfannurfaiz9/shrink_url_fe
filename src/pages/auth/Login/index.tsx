@@ -16,7 +16,6 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    clearErrors,
     setError,
     formState: { errors },
   } = useForm<LoginFormInputs>();
@@ -56,9 +55,6 @@ const Login = () => {
     setShowModal(false);
   };
 
-  useEffect(() => {
-    clearErrors();
-  }, []);
 
   return (
     <>
