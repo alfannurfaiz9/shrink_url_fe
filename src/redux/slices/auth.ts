@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { AsyncState } from "../initialState"
 import { createAsyncState } from "../initialState";
-import type { IRegisterResponse, IRegisterPayload } from "../types/auth.types";
+import type { IAuthResponse, IRegisterPayload } from "../types/auth.types";
 import axios from "axios";
 
 interface IinitialState extends AsyncState {
@@ -14,7 +14,7 @@ const initialState: IinitialState = {
 };
 
 export const register = createAsyncThunk<
-  IRegisterResponse,
+  IAuthResponse,
   IRegisterPayload,
   { rejectValue: string }
 >("auth/register", async (payload, { rejectWithValue }) => {
