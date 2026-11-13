@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { FaRegBell, FaShieldAlt, FaPencilAlt, FaLink } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import avatar from "../../assets/avatar.jpeg";
 import FeatureUnavailableModal from "../../components/FeatureUnavailableModal";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getUserProfile } from "../../redux/slices/user";
+import moment from "moment";
 
 const UserProfile = () => {
+  const dispatch = useAppDispatch()
+  const user = useAppSelector(state => state.user.detail)
   const [notifications, setNotifications] = useState(false);
   const [showModal, setShowModal] = useState(false);
   
@@ -16,6 +21,10 @@ const UserProfile = () => {
   const handleLogout = () => {
     console.log("logout");
   }
+
+  useEffect(() => {
+    dispatch(getUserProfile());
+  }, [dispatch]);
 
   return (
     <>
@@ -46,7 +55,9 @@ const UserProfile = () => {
                   </button>
                 </div>
                 <div className="flex flex-col text-left">
-                  <h2 className="text-lg font-bold text-dark">Alex Thompson</h2>
+                  <h2 className="text-lg font-bold text-dark">
+                    {user?.full_name}
+                  </h2>
                   <p className="text-dark-gray text-xs">Member</p>
                 </div>
               </div>
@@ -56,7 +67,7 @@ const UserProfile = () => {
                     EMAIL ADDRESS
                   </span>
                   <span className="text-xs font-semibold text-dark">
-                    user@example.com
+                    {user?.email}
                   </span>
                 </div>
                 <div className="flex flex-col gap-1 p-4 rounded-xl bg-slate-50/50 border border-gray/10 text-left">
@@ -64,7 +75,7 @@ const UserProfile = () => {
                     ACCOUNT TENURE
                   </span>
                   <span className="text-xs font-semibold text-dark">
-                    Member since: January 1, 2026
+                    Member since: {moment(user?.created_at).format('MMM DD, YYYY')}
                   </span>
                 </div>
               </div>
@@ -77,7 +88,9 @@ const UserProfile = () => {
                     <span className="text-[10px] font-bold tracking-wider text-white/70 uppercase">
                       ACTIVE ASSETS
                     </span>
-                    <span className="text-2xl font-extrabold">12</span>
+                    <span className="text-2xl font-extrabold">
+                      {user?.active_link}
+                    </span>
                   </div>
                 </div>
                 <Link
@@ -98,7 +111,7 @@ const UserProfile = () => {
                   <button
                     type="button"
                     onClick={() => {
-                      setShowModal(true)
+                      setShowModal(true);
                       setNotifications(false);
                     }}
                     className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors cursor-pointer ${
