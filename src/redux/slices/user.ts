@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { createAsyncState, type AsyncState } from "../initialState";
-import type { IUser } from "../types/user.types";
+import type { IUser, IUserDetail } from "../types/user.types";
 import { axiosPrivate } from "../../api/axios";
 
 interface IinitialState extends AsyncState {
-  user: IUser| null;
-  detail: IUser| null;
+  user: IUser | null;
+  detail: IUserDetail | null;
 }
 
 const initialState: IinitialState = {
@@ -26,7 +26,7 @@ export const getUserInfo = createAsyncThunk<IUser, void, { rejectValue: string }
   },
 );
 
-export const getUserProfile = createAsyncThunk<IUser, void, { rejectValue: string }>(
+export const getUserProfile = createAsyncThunk<IUserDetail, void, { rejectValue: string }>(
   "user/profile",
   async (_, { rejectWithValue }) => {
     try {
