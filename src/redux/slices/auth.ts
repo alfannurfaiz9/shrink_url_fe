@@ -4,6 +4,7 @@ import { createAsyncState } from "../initialState";
 import type { ILoginPayload, ILoginResponse, IRegisterPayload, IRegisterResponse } from "../types/auth.types";
 import axios from "axios";
 import { axiosPrivate } from "../../api/axios";
+import { clearUser } from "./user";
 
 interface IinitialState extends AsyncState {
   token: string | null;
@@ -48,11 +49,12 @@ export const login = createAsyncThunk<
   }
 });
 
-export const logout = createAsyncThunk<any, void, { rejectValue: any }>(
+export const logout = createAsyncThunk<any, void, { dispatch: any,rejectValue: any }>(
   "auth/logout",
-  async (_, { rejectWithValue }) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
       const response = await axiosPrivate.post(`/auth/logout`);
+      dispatch(clearUser());
       return response.data;
     } catch (error: any) {
       if (error.response && error.response.data) {
