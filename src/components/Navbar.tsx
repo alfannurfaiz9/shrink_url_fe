@@ -3,7 +3,6 @@ import { Link, NavLink, useNavigate } from "react-router";
 import { navLinks } from "../constants/navLinks";
 import { CgClose, CgMenuRight } from "react-icons/cg";
 import { FiLogOut } from "react-icons/fi";
-import Cookies from "js-cookie";
 import avatar from "../assets/avatar.jpeg";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { logout } from "../redux/slices/auth";
@@ -13,7 +12,6 @@ import { upperCaseMessage } from "../utils/upperCaseMessage";
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const token = Cookies.get("token");
   const user = useAppSelector((state) => state.user.user);
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -37,11 +35,11 @@ const Navbar = () => {
       <div className="flex items-center gap-12">
         <Link
           to="/"
-          className={`${!token && "lg:py-5"} py-4 text-xl font-bold text-gray-900`}
+          className={`${!user && "lg:py-5"} py-4 text-xl font-bold text-gray-900`}
         >
           ShrinkURL
         </Link>
-        <nav className={`${token && "lg:flex"} hidden items-center`}>
+        <nav className={`${user && "lg:flex"} hidden items-center`}>
           <ul className="flex items-center gap-8 list-none">
             {navLinks.map((link) => {
               const Icon = link.icon;
@@ -67,11 +65,11 @@ const Navbar = () => {
         </nav>
       </div>
       <div className="flex items-center gap-4">
-        {token ? (
+        {user ? (
           <div className="relative">
             <div
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className={`${token && "lg:flex"} w-10 h-10 rounded-full overflow-hidden cursor-pointer border border-gray/20 hover:opacity-90 transition-all hidden items-center justify-center`}
+              className={`${user && "lg:flex"} w-10 h-10 rounded-full overflow-hidden cursor-pointer border border-gray/20 hover:opacity-90 transition-all hidden items-center justify-center`}
             >
               <img
                 src={avatar}
@@ -130,7 +128,7 @@ const Navbar = () => {
           isOpen ? "flex" : "hidden"
         } absolute top-full left-0 w-full bg-white px-6 py-4 flex-col gap-2 lg:hidden shadow-lg border-t border-gray-100 z-50`}
       >
-        <nav className={`${token ? "block" : "hidden"}`}>
+        <nav className={`${user ? "block" : "hidden"}`}>
           <ul className="flex flex-col gap-2 list-none">
             {navLinks.map((link) => {
               const Icon = link.icon;
@@ -155,7 +153,7 @@ const Navbar = () => {
             })}
           </ul>
         </nav>
-        {token ? (
+        {user ? (
           <div className="pt-2 flex flex-col gap-2 border-t border-gray/10 mt-2">
             <button
               type="button"
