@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { FaRegBell, FaShieldAlt, FaPencilAlt, FaLink } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import avatar from "../../assets/avatar.jpeg";
@@ -7,8 +7,12 @@ import FeatureUnavailableModal from "../../components/FeatureUnavailableModal";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getUserProfile } from "../../redux/slices/user";
 import moment from "moment";
+import { logout } from "../../redux/slices/auth";
+import { toast } from "react-toastify";
+import { upperCaseMessage } from "../../utils/upperCaseMessage";
 
 const UserProfile = () => {
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.user.detail)
   const [notifications, setNotifications] = useState(false);
@@ -18,8 +22,14 @@ const UserProfile = () => {
     setShowModal(false);
   }
 
-  const handleLogout = () => {
-    console.log("logout");
+  const handleLogout = async() => {
+    try {
+      const response = await dispatch(logout()).unwrap();
+      toast.success(upperCaseMessage(response.message));
+      navigate("/home");
+    } catch (error: any) {
+      toast.error(upperCaseMessage(error.message));
+    }
   }
 
   useEffect(() => {
@@ -75,7 +85,8 @@ const UserProfile = () => {
                     ACCOUNT TENURE
                   </span>
                   <span className="text-xs font-semibold text-dark">
-                    Member since: {moment(user?.created_at).format('MMM DD, YYYY')}
+                    Member since:{" "}
+                    {moment(user?.created_at).format("MMM DD, YYYY")}
                   </span>
                 </div>
               </div>
