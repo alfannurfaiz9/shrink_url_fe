@@ -41,7 +41,11 @@ export const getUserProfile = createAsyncThunk<IUserDetail, void, { rejectValue:
 const userSlice = createSlice({
     name: "user",
     initialState,
-    reducers: {},
+    reducers: {
+      clearUser: () => {
+        return initialState;
+      }
+    },
     extraReducers: (builder) => {
         return builder
           .addAsyncThunk(getUserInfo, {
@@ -83,4 +87,5 @@ const userSlice = createSlice({
     }
 })
 
+export const { clearUser } = userSlice.actions;
 export default userSlice.reducer;
