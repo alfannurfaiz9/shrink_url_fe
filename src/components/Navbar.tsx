@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { navLinks } from "../constants/navLinks";
 import { CgClose, CgMenuRight } from "react-icons/cg";
