@@ -39,23 +39,41 @@ const linkSlice = createSlice({
     initialState,
     reducers:{},
     extraReducers: (builder) => {
-        return builder.addAsyncThunk(createLink, {
-          pending: (state) => {
-            state.isPending = true;
-            state.isFulfilled = false;
-            state.isRejected = false;
-            state.error = null;
-          },
-          fulfilled: (state) => {
-            state.isPending = false;
-            state.isFulfilled = true;
-          },
-          rejected: (state, { payload }) => {
-            state.isPending = false;
-            state.isRejected = true;
-            state.error = payload;
-          },
-        });
+        return builder
+          .addAsyncThunk(createLink, {
+            pending: (state) => {
+              state.isPending = true;
+              state.isFulfilled = false;
+              state.isRejected = false;
+              state.error = null;
+            },
+            fulfilled: (state) => {
+              state.isPending = false;
+              state.isFulfilled = true;
+            },
+            rejected: (state, { payload }) => {
+              state.isPending = false;
+              state.isRejected = true;
+              state.error = payload;
+            },
+          })
+          .addAsyncThunk(checkExistingLink, {
+            pending: (state) => {
+              state.isPending = true;
+              state.isFulfilled = false;
+              state.isRejected = false;
+              state.error = null;
+            },
+            fulfilled: (state) => {
+              state.isPending = false;
+              state.isFulfilled = true;
+            },
+            rejected: (state, { payload }) => {
+              state.isPending = false;
+              state.isRejected = true;
+              state.error = payload;
+            },
+          });
     }
 })
 
