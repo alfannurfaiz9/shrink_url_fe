@@ -1,8 +1,12 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { FaBolt } from "react-icons/fa";
 import { IoEyeOutline, IoLinkOutline } from "react-icons/io5";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import type { CreateLinkFormInputs } from "./form.types";
+import { useAppDispatch } from "../../redux/hooks";
+import { createLink } from "../../redux/slices/link";
+import { toast } from "react-toastify";
+import { upperCaseMessage } from "../../utils/upperCaseMessage";
 
 const CreateLinkForm = () => {
   const {
@@ -13,12 +17,14 @@ const CreateLinkForm = () => {
     formState: { errors },
   } = useForm<CreateLinkFormInputs>({});
 
-  const customSlug = watch("custom_slug");
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch()
+  const customSlug = watch("slug");
   const reservedWord = ["api", "login", "register", "dashboard"]
 
-  const onSubmit: SubmitHandler<CreateLinkFormInputs> = (data) => {
-   if (data.custom_slug.length > 0 && (data.custom_slug.length < 3 || data.custom_slug.length > 50)) {
-     setError("custom_slug", {
+  const onSubmit: SubmitHandler<CreateLinkFormInputs> = async (data) => {
+   if (data.slug.length > 0 && (data.slug.length < 3 || data.slug.length > 50)) {
+     setError("slug", {
        type: "custom",
        message: "Custom slug must be between 3 and 50 characters",
      });
@@ -26,18 +32,24 @@ const CreateLinkForm = () => {
    }
 
     const hasReservedWord = reservedWord.some((word) =>
-      data.custom_slug.toLowerCase().includes(word.toLowerCase()),
+      data.slug.toLowerCase().includes(word.toLowerCase()),
     );
 
     if (hasReservedWord) {
-      setError("custom_slug", {
+      setError("slug", {
         type: "custom",
         message: `Custom slug cannot contain reserved words (${reservedWord.join(", ")})`,
       });
       return;
     }
 
-    console.log(data);
+    try {
+      const response = await dispatch(createLink(data)).unwrap();
+      toast.success(upperCaseMessage(response.message))
+      navigate("/user/dashboard");
+    } catch (error: any) {
+      toast.error(upperCaseMessage(error));
+    }
   };
 
   return (
@@ -54,11 +66,11 @@ const CreateLinkForm = () => {
           <input
             type="url"
             placeholder="https://example.com/your-long-url-here"
-            {...register("destinationUrl", {
+            {...register("original_url", {
               required: "Destination URL must be filled",
             })}
             className={`w-full pl-11 pr-4 py-3 rounded-xl border bg-slate-50/30 text-dark placeholder:text-dark-gray/40 text-sm focus:outline-none transition-all ${
-              errors.destinationUrl
+              errors.original_url
                 ? "border-red-500 focus:border-red-500"
                 : "border-gray/20 focus:border-primary"
             }`}
@@ -67,9 +79,9 @@ const CreateLinkForm = () => {
         <span className="text-[11px] text-dark-gray/60">
           Ensure your URL starts with http:// or https://
         </span>
-        {errors.destinationUrl && (
+        {errors.original_url && (
           <span className="text-xs text-red-500">
-            {errors.destinationUrl.message}
+            {errors.original_url.message}
           </span>
         )}
       </div>
@@ -79,7 +91,7 @@ const CreateLinkForm = () => {
         </label>
         <div
           className={`flex items-center rounded-xl border bg-slate-50/30 overflow-hidden transition-all ${
-            errors.custom_slug
+            errors.slug
               ? "border-red-500"
               : "border-gray/20 focus-within:border-primary"
           }`}
@@ -90,7 +102,7 @@ const CreateLinkForm = () => {
           <input
             type="text"
             placeholder="my-custom-slug"
-            {...register("custom_slug", {
+            {...register("slug", {
               pattern: {
                 value: /^[a-zA-Z0-9-]+$/,
                 message:
@@ -103,10 +115,8 @@ const CreateLinkForm = () => {
         <span className="text-[11px] text-dark-gray/60">
           Leave blank to generate a random unique identifier.
         </span>
-        {errors.custom_slug && (
-          <span className="text-xs text-red-500">
-            {errors.custom_slug.message}
-          </span>
+        {errors.slug && (
+          <span className="text-xs text-red-500">{errors.slug.message}</span>
         )}
       </div>
       <div className="p-4 rounded-xl bg-primary/5 border border-primary/10 flex flex-col gap-1.5">

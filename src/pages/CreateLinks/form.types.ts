@@ -1,4 +1,4 @@
 export type CreateLinkFormInputs = {
-  destinationUrl: string;
-  custom_slug: string;
+  original_url: string;
+  slug: string;
 };
