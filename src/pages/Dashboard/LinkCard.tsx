@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { FaCheck, FaRegCalendarAlt, FaRegCopy, FaRegTrashAlt } from "react-icons/fa";
 import { IoLink } from "react-icons/io5";
-import { MdOutlineBarChart } from "react-icons/md";
 import { Link } from "react-router";
-import type { LinkItem } from "./link.types";
+import type { ILinks } from "../../redux/types/link.types";
+import moment from "moment";
 
-const LinkCard = ({ item }: { item: LinkItem }) => {
+const LinkCard = ({ item }: { item: ILinks }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -44,12 +44,14 @@ const LinkCard = ({ item }: { item: LinkItem }) => {
           <div className="flex items-left flex-col gap-1 lg:flex-row lg:gap-4 mt-2 text-[10px] md:text-xs text-dark-gray/60 font-semibold">
             <div className="flex items-center gap-1.5">
               <FaRegCalendarAlt />
-              <span className="uppercase">{item.created_at}</span>
+              <span className="uppercase">
+                {moment(item.created_at).format("MMM, DD, YYYY")}
+              </span>
             </div>
-            <div className="flex items-center gap-1.5 uppercase">
+            {/* <div className="flex items-center gap-1.5 uppercase">
               <MdOutlineBarChart className="text-sm" />
-              <span>{item.clicks}</span> Clicks
-            </div>
+              <span>100</span> Clicks
+            </div> */}
           </div>
         </div>
       </div>
