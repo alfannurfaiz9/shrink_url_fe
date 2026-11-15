@@ -1,5 +1,5 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { FaBolt } from "react-icons/fa";
+import { FaBolt, FaSpinner } from "react-icons/fa";
 import { IoEyeOutline, IoLinkOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router";
 import type { CreateLinkFormInputs } from "./form.types";
@@ -24,8 +24,11 @@ const CreateLinkForm = () => {
   const customSlug = watch("slug");
   const reservedWord = ["api", "login", "register", "dashboard"]
   const [slugMessage, setSlugMessage] = useState("");
+  const [loading, setLoading] = useState(false)
 
   const onSubmit: SubmitHandler<CreateLinkFormInputs> = async (data) => {
+    setLoading(true)
+
     try {
       const response = await dispatch(createLink(data)).unwrap();
       toast.success(upperCaseMessage(response.message));
@@ -34,12 +37,13 @@ const CreateLinkForm = () => {
       toast.error(upperCaseMessage(error));
     } finally {
       setSlugMessage("");
+      setLoading(false)
     }
   };
 
   useEffect(() => {
     if (!customSlug) {
-      setSlugMessage("")
+      setSlugMessage("");
       clearErrors("slug");
       return;
     }
@@ -69,6 +73,8 @@ const CreateLinkForm = () => {
       return;
     }
 
+    setLoading(true);
+
     const timer = setTimeout(async () => {
       try {
         const response = await dispatch(checkExistingLink(customSlug)).unwrap();
@@ -80,6 +86,8 @@ const CreateLinkForm = () => {
           type: "custom",
           message: upperCaseMessage(error),
         });
+      } finally {
+        setLoading(false);
       }
     }, 1500);
 
@@ -173,10 +181,15 @@ const CreateLinkForm = () => {
       <div className="flex items-center gap-4 pt-2">
         <button
           type="submit"
-          className="bg-primary text-white px-6 py-3 rounded-xl font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-md cursor-pointer text-sm"
+          disabled={loading}
+          className="bg-primary text-white px-6 py-3 rounded-xl font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-md cursor-pointer text-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span>Create Link</span>
-          <FaBolt className="text-xs" />
+          <span>{loading ? "Checking..." : "Create Link"}</span>
+          {loading ? (
+            <FaSpinner className="text-xs animate-spin" />
+          ) : (
+            <FaBolt className="text-xs" />
+          )}
         </button>
         <Link
           to="/user/dashboard"
