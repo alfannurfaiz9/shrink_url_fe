@@ -4,9 +4,10 @@ import { IoEyeOutline, IoLinkOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router";
 import type { CreateLinkFormInputs } from "./form.types";
 import { useAppDispatch } from "../../redux/hooks";
-import { createLink } from "../../redux/slices/link";
+import { checkExistingLink, createLink } from "../../redux/slices/link";
 import { toast } from "react-toastify";
 import { upperCaseMessage } from "../../utils/upperCaseMessage";
+import { useEffect, useState } from "react";
 
 const CreateLinkForm = () => {
   const {
@@ -14,6 +15,7 @@ const CreateLinkForm = () => {
     handleSubmit,
     watch,
     setError,
+    clearErrors,
     formState: { errors },
   } = useForm<CreateLinkFormInputs>({});
 
@@ -21,18 +23,42 @@ const CreateLinkForm = () => {
   const dispatch = useAppDispatch()
   const customSlug = watch("slug");
   const reservedWord = ["api", "login", "register", "dashboard"]
+  const [slugMessage, setSlugMessage] = useState("");
 
   const onSubmit: SubmitHandler<CreateLinkFormInputs> = async (data) => {
-   if (data.slug.length > 0 && (data.slug.length < 3 || data.slug.length > 50)) {
-     setError("slug", {
-       type: "custom",
-       message: "Custom slug must be between 3 and 50 characters",
-     });
-     return;
-   }
+    try {
+      const response = await dispatch(createLink(data)).unwrap();
+      toast.success(upperCaseMessage(response.message));
+      navigate("/user/dashboard");
+    } catch (error: any) {
+      toast.error(upperCaseMessage(error));
+    } finally {
+      setSlugMessage("");
+    }
+  };
+
+  useEffect(() => {
+    if (!customSlug) {
+      setSlugMessage("")
+      clearErrors("slug");
+      return;
+    }
+
+    if (
+      customSlug?.length > 0 &&
+      (customSlug?.length < 3 || customSlug?.length > 50)
+    ) {
+      setSlugMessage("");
+
+      setError("slug", {
+        type: "custom",
+        message: "Custom slug must be between 3 and 50 characters",
+      });
+      return;
+    }
 
     const hasReservedWord = reservedWord.some((word) =>
-      data.slug.toLowerCase().includes(word.toLowerCase()),
+      customSlug.toLowerCase().includes(word.toLowerCase()),
     );
 
     if (hasReservedWord) {
@@ -43,14 +69,24 @@ const CreateLinkForm = () => {
       return;
     }
 
-    try {
-      const response = await dispatch(createLink(data)).unwrap();
-      toast.success(upperCaseMessage(response.message))
-      navigate("/user/dashboard");
-    } catch (error: any) {
-      toast.error(upperCaseMessage(error));
-    }
-  };
+    const timer = setTimeout(async () => {
+      try {
+        const response = await dispatch(checkExistingLink(customSlug)).unwrap();
+        setSlugMessage(upperCaseMessage(response.message));
+        clearErrors("slug");
+      } catch (error: any) {
+        setSlugMessage("");
+        setError("slug", {
+          type: "custom",
+          message: upperCaseMessage(error),
+        });
+      }
+    }, 1500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [customSlug, dispatch, clearErrors, setError]);
 
   return (
     <form
@@ -115,6 +151,9 @@ const CreateLinkForm = () => {
         <span className="text-[11px] text-dark-gray/60">
           Leave blank to generate a random unique identifier.
         </span>
+        {slugMessage && (
+          <span className="text-xs text-green-600">{slugMessage}</span>
+        )}
         {errors.slug && (
           <span className="text-xs text-red-500">{errors.slug.message}</span>
         )}

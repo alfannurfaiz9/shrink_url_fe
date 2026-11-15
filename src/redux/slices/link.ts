@@ -12,6 +12,15 @@ const initialState = {
   ...createAsyncState(),
 };
 
+export const checkExistingLink = createAsyncThunk<ICreateLinkResponse, string, {rejectValue: string}>("link/check", async (slug, {rejectWithValue}) => {
+  try {
+    const response = await axiosPrivate.get(`/links/check?slug=${slug}`);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message);
+  }
+})
+
 export const createLink = createAsyncThunk<
   ICreateLinkResponse,
   ICreateLinkPayload,
