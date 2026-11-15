@@ -4,6 +4,7 @@ import { axiosPrivate } from "../../api/axios";
 import type {
   ICreateLinkPayload,
   ICreateLinkResponse,
+  IDeleteLinkResponse,
   ILinks,
   IMetadata,
 } from "../types/link.types";
@@ -32,7 +33,7 @@ export const createLink = createAsyncThunk<
   ICreateLinkResponse,
   ICreateLinkPayload,
   { rejectValue: string }
->("/link/create", async (payload, { rejectWithValue }) => {
+>("link/create", async (payload, { rejectWithValue }) => {
   try {
     const response = await axiosPrivate.post("/links", payload);
     return response.data;
@@ -45,7 +46,7 @@ export const getUserLinks = createAsyncThunk<
   any,
   void,
   { rejectValue: string }
->("/link/all", async (_, { rejectWithValue }) => {
+>("link/all", async (_, { rejectWithValue }) => {
   try {
     const response = await axiosPrivate.get("/links");
     return response.data;
@@ -53,6 +54,21 @@ export const getUserLinks = createAsyncThunk<
     return rejectWithValue(error.response?.data?.message);
   }
 });
+
+export const deleteLink = createAsyncThunk<IDeleteLinkResponse, string, { rejectValue: string }>(
+  "link/delete",
+  async (id: string, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await axiosPrivate.delete(`/links/${id}`);
+
+      dispatch(getUserLinks());
+
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message);
+    }
+  },
+);
 
 const linkSlice = createSlice({
     name: "links",
@@ -93,14 +109,15 @@ const linkSlice = createSlice({
               state.isRejected = true;
               state.error = payload;
             },
-          }).addAsyncThunk(getUserLinks, {
+          })
+          .addAsyncThunk(getUserLinks, {
             pending: (state) => {
               state.isPending = true;
               state.isFulfilled = false;
               state.isRejected = false;
               state.error = null;
             },
-            fulfilled: (state, {payload}) => {
+            fulfilled: (state, { payload }) => {
               state.isPending = false;
               state.isFulfilled = true;
               state.links = payload.result;
@@ -112,6 +129,23 @@ const linkSlice = createSlice({
               state.error = payload;
             },
           })
+          .addAsyncThunk(deleteLink, {
+            pending: (state) => {
+              state.isPending = true;
+              state.isFulfilled = false;
+              state.isRejected = false;
+              state.error = null;
+            },
+            fulfilled: (state) => {
+              state.isPending = false;
+              state.isFulfilled = true;
+            },
+            rejected: (state, { payload }) => {
+              state.isPending = false;
+              state.isRejected = true;
+              state.error = payload;
+            },
+          });
     }
 })
 

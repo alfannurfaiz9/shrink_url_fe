@@ -21,3 +21,8 @@ export interface IMetadata {
   prev: string;
   total_page: number;
 }
+
+export interface IDeleteLinkResponse {
+  succes: boolean;
+  message: string;
+}
