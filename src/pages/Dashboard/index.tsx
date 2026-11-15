@@ -1,41 +1,16 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { IoSearchOutline } from "react-icons/io5";
-import type { LinkItem } from "./link.types";
 import LinkCard from "./LinkCard";
-
-const dummyLinks: LinkItem[] = [
-  {
-    id: "1",
-    slug: "aB3x9",
-    original_url: "https://www.google.com",
-    created_at: "Oct 24, 2023",
-    clicks: "1.2K",
-  },
-  {
-    id: "2",
-    slug: "v9Pq2",
-    original_url: "https://www.google.com",
-    created_at: "Oct 21, 2023",
-    clicks: "842",
-  },
-  {
-    id: "3",
-    slug: "zR4t1",
-    original_url: "https://www.google.com",
-    created_at: "Oct 19, 2023",
-    clicks: "2.4K",
-  },
-  {
-    id: "4",
-    slug: "ml5k8",
-    original_url: "https://www.google.com",
-    created_at: "Oct 15, 2023",
-    clicks: "341",
-  },
-];
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getUserLinks } from "../../redux/slices/link";
 
 const Dashboard = () => {
-  const [links] = useState<LinkItem[]>(dummyLinks);
+  const dispatch = useAppDispatch();
+  const { links } = useAppSelector((state) => state.link);
+
+  useEffect(() => {
+    dispatch(getUserLinks());
+  }, []);
 
   return (
     <section className="w-full bg-slate-50/90 min-h-dvh">
@@ -55,7 +30,7 @@ const Dashboard = () => {
                 TOTAL ACTIVE
               </span>
               <span className="text-2xl md:text-3xl font-extrabold text-primary">
-                {links.length > 0 ? "124" : "0"}
+                {links !== null && links?.length > 0 ? "124" : "0"}
               </span>
             </div>
           </div>
@@ -68,7 +43,7 @@ const Dashboard = () => {
             />
           </div>
           <div className="flex flex-col gap-4 grow">
-            {links.length > 0 ? (
+            {links !== null && links?.length > 0 ? (
               links.map((item) => <LinkCard key={item.id} item={item} />)
             ) : (
               <div className="flex flex-col items-center justify-center p-12 bg-white rounded-2xl border border-gray/10 shadow-sm gap-2 my-auto">
