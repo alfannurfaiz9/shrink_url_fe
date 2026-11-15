@@ -4,8 +4,13 @@ import { IoLink } from "react-icons/io5";
 import { Link } from "react-router";
 import type { ILinks } from "../../redux/types/link.types";
 import moment from "moment";
+import { useAppDispatch } from "../../redux/hooks";
+import { deleteLink } from "../../redux/slices/link";
+import { toast } from "react-toastify";
+import { upperCaseMessage } from "../../utils/upperCaseMessage";
 
 const LinkCard = ({ item }: { item: ILinks }) => {
+  const dispatch = useAppDispatch()
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -22,6 +27,15 @@ const LinkCard = ({ item }: { item: ILinks }) => {
       console.error("Failed to copy text: ", err);
     }
   };
+
+  const handleDelete = async () => {
+    try {
+      const response = await dispatch(deleteLink(item.id)).unwrap()
+     toast.success(upperCaseMessage(response.message))
+    } catch (error: any) {
+      toast.error(upperCaseMessage(error))
+    }
+  }
 
   return (
     <div className="w-full bg-white p-5 rounded-2xl shadow-sm border border-gray/10 flex items-center justify-between gap-4">
@@ -70,6 +84,7 @@ const LinkCard = ({ item }: { item: ILinks }) => {
         </button>
         <button
           type="button"
+          onClick={handleDelete}
           className="p-2.5 rounded-lg border border-gray/20 text-red-500 hover:opacity-70 transition-all cursor-pointer bg-slate-50/50"
         >
           <FaRegTrashAlt className="text-sm" />
