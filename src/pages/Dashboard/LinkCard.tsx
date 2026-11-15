@@ -31,7 +31,7 @@ const LinkCard = ({ item }: { item: ILinks }) => {
         </div>
         <div className="flex flex-col gap-1 text-left">
           <Link
-            to={`https://${item.slug}`}
+            to={`${import.meta.env.VITE_API_URL}/${item.slug}`}
             target="_blank"
             rel="noreferrer"
             className="text-primary font-bold text-sm hover:opacity-80"
