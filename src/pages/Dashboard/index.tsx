@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import LinkCard from "./LinkCard";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -8,22 +8,50 @@ import { useSearchParams } from "react-router";
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const { links } = useAppSelector((state) => state.link);
-  const {metadata} = useAppSelector(state => state.link)
+  const { metadata } = useAppSelector((state) => state.link);
   const loading = useAppSelector((state) => state.link.isPending);
-  const [searchParam,setSearcharam] = useSearchParams("");
+  const [searchParam, setSearchParam] = useSearchParams("");
   const searchValue = searchParam.get("search") || "";
 
   const handleNext = () => {
-    metadata?.next && dispatch(getUserLinks(metadata?.next));
-  }
+    if (metadata?.next) {
+      const newSearchParams = new URLSearchParams(searchParam);
+      newSearchParams.set("page", (metadata.current_page + 1).toString());
+
+      setSearchParam(newSearchParams);
+    }
+  };
 
   const handlePrev = () => {
-    metadata?.prev && dispatch(getUserLinks(metadata?.prev));
-  }
+    if (metadata?.prev) {
+      const newSearchParams = new URLSearchParams(searchParam);
+      newSearchParams.set("page", (metadata.current_page - 1).toString());
+
+      setSearchParam(newSearchParams);
+    }
+  };
 
   useEffect(() => {
-    dispatch(getUserLinks("links"));
-  }, [dispatch]);
+    (async () => {
+      if (!searchParam.get("page")) {
+        const newSearchParams = new URLSearchParams(searchParam)
+        newSearchParams.set("page", "1")
+
+        setSearchParam(newSearchParams)
+      }
+      if (!searchParam.get("limit")) {
+        const newSearchParams = new URLSearchParams(searchParam)
+        newSearchParams.set("limit", "6");
+
+        setSearchParam(newSearchParams)
+      }
+      try {
+        await dispatch(getUserLinks(`links?${searchParam}`)).unwrap();
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [dispatch, searchParam]);
 
   return (
     <section className="w-full bg-slate-50/90 min-h-dvh">
@@ -61,7 +89,7 @@ const Dashboard = () => {
                   newSearchParams.set("search", e.target.value);
                 }
 
-                setSearcharam(newSearchParams);
+                setSearchParam(newSearchParams);
               }}
               placeholder="Search by name or URL..."
               className="w-full pl-11 pr-12 py-3 rounded-xl border border-gray/20 bg-white text-dark placeholder:text-dark-gray/40 text-sm focus:outline-none focus:border-primary transition-all shadow-sm"
