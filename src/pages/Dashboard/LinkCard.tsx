@@ -93,7 +93,7 @@ const LinkCard = ({ item }: { item: ILinks }) => {
           className="p-2.5 rounded-lg border border-gray/20 text-red-500 hover:opacity-70 transition-all cursor-pointer bg-slate-50/50"
         >
           {activeId ? (
-            <FaSpinner className="text-xl animate-spin" />
+            <FaSpinner className="text-sm animate-spin" />
           ) : (
             <FaRegTrashAlt className="text-sm" />
           )}
