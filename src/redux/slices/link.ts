@@ -5,6 +5,7 @@ import type {
   ICreateLinkPayload,
   ICreateLinkResponse,
   IDeleteLinkResponse,
+  IGetLinksResponse,
   ILinks,
   IMetadata,
 } from "../types/link.types";
@@ -42,18 +43,17 @@ export const createLink = createAsyncThunk<
   }
 });
 
-export const getUserLinks = createAsyncThunk<
-  any,
-  void,
-  { rejectValue: string }
->("link/all", async (_, { rejectWithValue }) => {
-  try {
-    const response = await axiosPrivate.get("/links");
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message);
-  }
-});
+export const getUserLinks = createAsyncThunk<IGetLinksResponse, string, { rejectValue: string }>(
+  "link/all",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await axiosPrivate.get(`${payload}`);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message);
+    }
+  },
+);
 
 export const deleteLink = createAsyncThunk<
   IDeleteLinkResponse,

@@ -22,6 +22,13 @@ export interface IMetadata {
   total_page: number;
 }
 
+export interface IGetLinksResponse {
+  succes: boolean;
+  message: string;
+  result: ILinks[];
+  metadata: IMetadata;
+}
+
 export interface IDeleteLinkResponse {
   succes: boolean;
   message: string;
