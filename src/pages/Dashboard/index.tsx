@@ -114,9 +114,9 @@ const Dashboard = () => {
             {loading ? (
               <div className="flex flex-col items-center justify-center p-12 bg-white rounded-2xl border border-gray/10 shadow-sm gap-2 my-auto">
                 <FaSpinner className="text-xl animate-spin" />
-                  <p className="text-dark font-semibold text-base">
-                    Loading links...
-                  </p>
+                <p className="text-dark font-semibold text-base">
+                  Loading links...
+                </p>
                 <p className="text-dark-gray text-xs text-center">
                   Please wait while we retrieve your shortened assets.
                 </p>
