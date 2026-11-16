@@ -8,6 +8,7 @@ const Dashboard = () => {
   const dispatch = useAppDispatch();
   const { links } = useAppSelector((state) => state.link);
   const {metadata} = useAppSelector(state => state.link)
+  const loading = useAppSelector((state) => state.link.isPending);
 
   const handleNext = () => {
     metadata?.next && dispatch(getUserLinks(metadata?.next));
@@ -52,8 +53,17 @@ const Dashboard = () => {
             />
           </div>
           <div className="flex flex-col gap-4 grow">
-            {links !== null && links?.length > 0 ? (
-              links.map((item) => <LinkCard key={item.id} item={item} />)
+            {loading ? (
+              <div className="flex flex-col items-center justify-center p-12 bg-white rounded-2xl border border-gray/10 shadow-sm gap-2 my-auto">
+                <p className="text-dark font-semibold text-base">
+                  Loading links...
+                </p>
+                <p className="text-dark-gray text-xs text-center">
+                  Please wait while we retrieve your shortened assets.
+                </p>
+              </div>
+            ) : links?.length ? (
+              links?.map((item) => <LinkCard key={item.id} item={item} />)
             ) : (
               <div className="flex flex-col items-center justify-center p-12 bg-white rounded-2xl border border-gray/10 shadow-sm gap-2 my-auto">
                 <p className="text-dark font-semibold text-base">
