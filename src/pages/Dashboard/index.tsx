@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import LinkCard from "./LinkCard";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -9,9 +9,10 @@ const Dashboard = () => {
   const dispatch = useAppDispatch();
   const { links } = useAppSelector((state) => state.link);
   const { metadata } = useAppSelector((state) => state.link);
-  const loading = useAppSelector((state) => state.link.isPending);
   const [searchParam, setSearchParam] = useSearchParams("");
   const searchValue = searchParam.get("search") || "";
+  const [notFound, setNotFound]= useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleNext = () => {
     if (metadata?.next) {
@@ -32,25 +33,38 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      if (!searchParam.get("page")) {
-        const newSearchParams = new URLSearchParams(searchParam)
-        newSearchParams.set("page", "1")
+    setLoading(true)
 
-        setSearchParam(newSearchParams)
-      }
-      if (!searchParam.get("limit")) {
-        const newSearchParams = new URLSearchParams(searchParam)
-        newSearchParams.set("limit", "6");
+    const page = searchParam.get("page");
+    const limit = searchParam.get("limit");
 
-        setSearchParam(newSearchParams)
-      }
-      try {
-        await dispatch(getUserLinks(`links?${searchParam}`)).unwrap();
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+    if (!page || !limit) {
+      const newParams = new URLSearchParams(searchParam);
+
+      if (!page) newParams.set("page", "1");
+      if (!limit) newParams.set("limit", "6");
+
+      setSearchParam(newParams);
+      return;
+    }
+
+  const getLinks = setTimeout(async () => {
+    try {
+      const response = await dispatch(
+        getUserLinks(`links?${searchParam}`),
+      ).unwrap();
+
+      setNotFound(!!searchValue && !response.result.length);
+    } catch (error) {
+      setNotFound(true);
+    } finally {
+      setLoading(false);
+    }
+  }, 1000);
+
+  return () => {
+    clearTimeout(getLinks);
+  };
   }, [dispatch, searchParam]);
 
   return (
@@ -113,8 +127,9 @@ const Dashboard = () => {
                   No links found
                 </p>
                 <p className="text-dark-gray text-xs text-center">
-                  You don't have any shortened links yet. Create one to get
-                  started.
+                  {notFound
+                    ? "No links found matching your search."
+                    : "You don't have any shortened links yet. Create one to get started."}
                 </p>
               </div>
             )}
