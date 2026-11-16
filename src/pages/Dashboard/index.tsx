@@ -7,9 +7,18 @@ import { getUserLinks } from "../../redux/slices/link";
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const { links } = useAppSelector((state) => state.link);
+  const {metadata} = useAppSelector(state => state.link)
+
+  const handleNext = () => {
+    metadata?.next && dispatch(getUserLinks(metadata?.next));
+  }
+
+  const handlePrev = () => {
+    metadata?.prev && dispatch(getUserLinks(metadata?.prev));
+  }
 
   useEffect(() => {
-    dispatch(getUserLinks());
+    !links && dispatch(getUserLinks("links"));
   }, []);
 
   return (
@@ -60,19 +69,21 @@ const Dashboard = () => {
           <div className="flex items-center justify-between w-full pt-4 mt-auto border-t border-gray/10 text-xs font-semibold text-dark-gray">
             <button
               type="button"
+              onClick={handlePrev}
               className="hover:opacity-70 transition-all cursor-pointer"
             >
               Prev Page
             </button>
             <div className="flex items-center gap-2">
               <span className="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center font-bold">
-                1
+                {metadata?.current_page}
               </span>
               <span className="text-dark-gray/50">of</span>
-              <span>5</span>
+              <span>{metadata?.total_page}</span>
             </div>
             <button
               type="button"
+              onClick={handleNext}
               className="hover:opacity-70 transition-all cursor-pointer"
             >
               Next
