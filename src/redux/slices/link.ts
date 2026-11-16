@@ -63,7 +63,7 @@ export const deleteLink = createAsyncThunk<
   try {
     const response = await axiosPrivate.delete(`/links/${id}`);
 
-    dispatch(getUserLinks());
+    dispatch(getUserLinks("/links"));
 
     return response.data;
   } catch (error: any) {
