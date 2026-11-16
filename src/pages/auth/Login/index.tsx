@@ -1,5 +1,5 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaSpinner } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router";
@@ -9,7 +9,7 @@ import FeatureUnavailableModal from "../../../components/FeatureUnavailableModal
 import { toast } from "react-toastify";
 import { upperCaseMessage } from "../../../utils/upperCaseMessage";
 import { login } from "../../../redux/slices/auth";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import Cookies from "js-cookie";
 
 const Login = () => {
@@ -24,6 +24,7 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const loading = useAppSelector(state => state.auth.isPending)
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
@@ -146,8 +147,13 @@ const Login = () => {
               type="submit"
               className="w-full bg-primary text-white py-3 rounded-lg font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-md cursor-pointer text-sm"
             >
-              <span>Log In</span>
-              <FaArrowRight className="text-xs" />
+              <span>{loading ? "Logging In..." : "Log In"}</span>
+              {loading ? (
+                              <FaSpinner className="text-xs animate-spin" />
+                            ) : (
+                                            <FaArrowRight className="text-xs" />
+
+                            )}
             </button>
           </form>
           <div className="flex items-center gap-4 my-1">
