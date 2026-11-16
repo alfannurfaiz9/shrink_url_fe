@@ -40,7 +40,7 @@ const Dashboard = () => {
                 TOTAL ACTIVE
               </span>
               <span className="text-2xl md:text-3xl font-extrabold text-primary">
-                {links !== null && links?.length > 0 ? "124" : "0"}
+                {links !== null && links?.length}
               </span>
             </div>
           </div>
@@ -76,7 +76,9 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-          <div className={`${links?.length ?"flex" : "hidden"} items-center justify-between w-full pt-4 mt-auto border-t border-gray/10 text-xs font-semibold text-dark-gray`}>
+          <div
+            className={`${links?.length ? "flex" : "hidden"} items-center justify-between w-full pt-4 mt-auto border-t border-gray/10 text-xs font-semibold text-dark-gray`}
+          >
             <button
               type="button"
               onClick={handlePrev}
