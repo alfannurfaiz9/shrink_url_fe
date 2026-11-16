@@ -1,10 +1,10 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaSpinner } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router";
 import type { RegisterFormInputs } from "./register.types";
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import {register as registerThunk} from "../../../redux/slices/auth"
 import { toast } from "react-toastify";
 import { upperCaseMessage } from "../../../utils/upperCaseMessage";
@@ -22,6 +22,7 @@ const Register = () => {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const loading = useAppSelector((state) => state.auth.isPending);
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async(data) => {
     const { password, confirm_password } = data;
@@ -193,8 +194,12 @@ const Register = () => {
               type="submit"
               className="w-full bg-primary text-white py-3 rounded-lg font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-md cursor-pointer text-sm"
             >
-              <span>Sign Up</span>
-              <FaArrowRight className="text-xs" />
+              <span>{loading ? "Signing up..." : "Sign Up"}</span>
+              {loading ? (
+                <FaSpinner className="text-xs animate-spin" />
+              ) : (
+                <FaArrowRight className="text-xs" />
+              )}
             </button>
           </form>
           <p className="text-center text-xs text-dark-gray/70 leading-relaxed">
