@@ -1,14 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import LinkCard from "./LinkCard";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getUserLinks } from "../../redux/slices/link";
+import { useSearchParams } from "react-router";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const { links } = useAppSelector((state) => state.link);
   const {metadata} = useAppSelector(state => state.link)
   const loading = useAppSelector((state) => state.link.isPending);
+  const [searchParam,setSearcharam] = useSearchParams("");
+  const searchValue = searchParam.get("search") || "";
 
   const handleNext = () => {
     metadata?.next && dispatch(getUserLinks(metadata?.next));
@@ -48,6 +51,18 @@ const Dashboard = () => {
             <IoSearchOutline className="absolute left-4 text-dark-gray/40 text-lg" />
             <input
               type="text"
+              value={searchValue}
+              onChange={(e) => {
+                const newSearchParams = new URLSearchParams(searchParam);
+
+                if (e.target.value === "") {
+                  newSearchParams.delete("search");
+                } else {
+                  newSearchParams.set("search", e.target.value);
+                }
+
+                setSearcharam(newSearchParams);
+              }}
               placeholder="Search by name or URL..."
               className="w-full pl-11 pr-12 py-3 rounded-xl border border-gray/20 bg-white text-dark placeholder:text-dark-gray/40 text-sm focus:outline-none focus:border-primary transition-all shadow-sm"
             />
