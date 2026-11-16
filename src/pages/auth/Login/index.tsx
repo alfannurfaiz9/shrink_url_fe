@@ -149,11 +149,10 @@ const Login = () => {
             >
               <span>{loading ? "Logging In..." : "Log In"}</span>
               {loading ? (
-                              <FaSpinner className="text-xs animate-spin" />
-                            ) : (
-                                            <FaArrowRight className="text-xs" />
-
-                            )}
+                <FaSpinner className="text-xs animate-spin" />
+              ) : (
+                <FaArrowRight className="text-xs" />
+              )}
             </button>
           </form>
           <div className="flex items-center gap-4 my-1">
