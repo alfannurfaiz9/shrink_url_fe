@@ -4,6 +4,7 @@ import LinkCard from "./LinkCard";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getUserLinks } from "../../redux/slices/link";
 import { useSearchParams } from "react-router";
+import { FaSpinner } from "react-icons/fa";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -112,9 +113,10 @@ const Dashboard = () => {
           <div className="flex flex-col gap-4 grow">
             {loading ? (
               <div className="flex flex-col items-center justify-center p-12 bg-white rounded-2xl border border-gray/10 shadow-sm gap-2 my-auto">
-                <p className="text-dark font-semibold text-base">
-                  Loading links...
-                </p>
+                <FaSpinner className="text-xl animate-spin" />
+                  <p className="text-dark font-semibold text-base">
+                    Loading links...
+                  </p>
                 <p className="text-dark-gray text-xs text-center">
                   Please wait while we retrieve your shortened assets.
                 </p>
