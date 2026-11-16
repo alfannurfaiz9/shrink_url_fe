@@ -140,7 +140,7 @@ const CreateLinkForm = () => {
               : "border-gray/20 focus-within:border-primary"
           }`}
         >
-          <div className="bg-gray/10 px-4 py-3 text-dark-gray/60 text-sm font-medium border-r border-gray/20">
+          <div className="bg-gray/10 px-4 py-3 text-dark-gray/60 text-sm font-medium border-r border-gray/20 truncate max-w-4/12">
             {`${import.meta.env.VITE_API_URL}/`}
           </div>
           <input
@@ -174,7 +174,7 @@ const CreateLinkForm = () => {
         <p className="text-xs text-dark">
           Your short link will be:
           <span className="font-semibold text-primary">
-            {`${import.meta.env.VITE_API_URL}/${customSlug || "random"}`}
+            {` ${import.meta.env.VITE_API_URL}/${customSlug || "random"}`}
           </span>
         </p>
       </div>
