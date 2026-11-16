@@ -55,20 +55,21 @@ export const getUserLinks = createAsyncThunk<
   }
 });
 
-export const deleteLink = createAsyncThunk<IDeleteLinkResponse, string, { rejectValue: string }>(
-  "link/delete",
-  async (id: string, { dispatch, rejectWithValue }) => {
-    try {
-      const response = await axiosPrivate.delete(`/links/${id}`);
+export const deleteLink = createAsyncThunk<
+  IDeleteLinkResponse,
+  string,
+  { rejectValue: string }
+>("link/delete", async (id: string, { dispatch, rejectWithValue }) => {
+  try {
+    const response = await axiosPrivate.delete(`/links/${id}`);
 
-      dispatch(getUserLinks());
+    dispatch(getUserLinks());
 
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message);
-    }
-  },
-);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message);
+  }
+});
 
 const linkSlice = createSlice({
     name: "links",
