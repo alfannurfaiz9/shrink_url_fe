@@ -43,9 +43,7 @@ The backend repository: [shrink_url_be](https://github.com/alfannurfaiz9/shrink_
 
 
 ```
-
-User -> React Router -> Pages/Components -> Redux Toolkit -> Axios -> Go Backend API
-
+User -> React Router -> Pages/Components -> Redux Toolkit -> Axios -> Backend API
 ```
 
 ## Getting Started
@@ -59,7 +57,7 @@ User -> React Router -> Pages/Components -> Redux Toolkit -> Axios -> Go Backend
 ### 1. Clone the Repository
 
 ```bash
-git clone [https://github.com/alfannurfaiz9/shrink_url_fe.git](https://github.com/alfannurfaiz9/shrink_url_fe.git)
+git clone https://github.com/alfannurfaiz9/shrink_url_fe.git
 cd shrink_url_fe
 ```
 
@@ -74,10 +72,8 @@ npm ci
 Create a `.env` file in the root of your project directory and add the following configuration:
 
 ```env
-VITE_API_BASE_URL=http://localhost:8080/api/v1
+VITE_API_URL={YOUR_API_URL}
 ```
-
-*(Sesuaikan URL port backend Go Anda jika berjalan di port yang berbeda)*
 
 ### 4. Run the Application
 
