@@ -40,7 +40,7 @@ const Dashboard = () => {
                 TOTAL ACTIVE
               </span>
               <span className="text-2xl md:text-3xl font-extrabold text-primary">
-                {links !== null && links?.length}
+                {metadata?.total_data || 0}
               </span>
             </div>
           </div>
