@@ -76,7 +76,7 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-          <div className="flex items-center justify-between w-full pt-4 mt-auto border-t border-gray/10 text-xs font-semibold text-dark-gray">
+          <div className={`${links?.length ?"flex" : "hidden"} items-center justify-between w-full pt-4 mt-auto border-t border-gray/10 text-xs font-semibold text-dark-gray`}>
             <button
               type="button"
               onClick={handlePrev}
