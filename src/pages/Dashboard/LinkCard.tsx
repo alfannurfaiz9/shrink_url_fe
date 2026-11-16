@@ -39,7 +39,7 @@ const LinkCard = ({ item }: { item: ILinks }) => {
 
   return (
     <div className="w-full bg-white p-5 rounded-2xl shadow-sm border border-gray/10 flex items-center justify-between gap-4">
-      <div className="flex items-start gap-4 max-w-8/12">
+      <div className="flex items-start gap-4 max-w-8/12 overflow-hidden">
         <div className="bg-primary/10 p-3 rounded-xl text-primary text-lg mt-1">
           <IoLink />
         </div>
