@@ -39,7 +39,7 @@ const LinkCard = ({ item }: { item: ILinks }) => {
 
   return (
     <div className="w-full bg-white p-5 rounded-2xl shadow-sm border border-gray/10 flex items-center justify-between gap-4">
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-4 max-w-8/12">
         <div className="bg-primary/10 p-3 rounded-xl text-primary text-lg mt-1">
           <IoLink />
         </div>
@@ -69,12 +69,12 @@ const LinkCard = ({ item }: { item: ILinks }) => {
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 bg-white border-l-6 border-white">
         <button
           type="button"
           onClick={handleCopy}
           title="Copy short link"
-          className="hidden lg:flex p-2.5 rounded-lg border border-gray/20 text-dark-gray hover:opacity-70 transition-all cursor-pointer bg-slate-50/50 items-center justify-center"
+          className="flex p-2.5 rounded-lg border border-gray/20 text-dark-gray hover:opacity-70 transition-all cursor-pointer bg-slate-50/50 items-center justify-center"
         >
           {copied ? (
             <FaCheck className="text-sm text-green-600" />
