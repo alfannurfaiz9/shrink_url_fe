@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { FaCheck, FaRegCalendarAlt, FaRegCopy, FaRegTrashAlt } from "react-icons/fa";
+import { FaCheck, FaRegCalendarAlt, FaRegCopy, FaRegTrashAlt, FaSpinner } from "react-icons/fa";
 import { IoLink } from "react-icons/io5";
 import { Link } from "react-router";
 import type { ILinks } from "../../redux/types/link.types";
 import moment from "moment";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deleteLink } from "../../redux/slices/link";
 import { toast } from "react-toastify";
 import { upperCaseMessage } from "../../utils/upperCaseMessage";
@@ -12,6 +12,7 @@ import { upperCaseMessage } from "../../utils/upperCaseMessage";
 const LinkCard = ({ item }: { item: ILinks }) => {
   const dispatch = useAppDispatch()
   const [copied, setCopied] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const handleCopy = async () => {
     const baseUrl = import.meta.env.VITE_API_URL;
@@ -29,11 +30,15 @@ const LinkCard = ({ item }: { item: ILinks }) => {
   };
 
   const handleDelete = async () => {
+    setActiveId(item.id)
+
     try {
       const response = await dispatch(deleteLink(item.id)).unwrap()
      toast.success(upperCaseMessage(response.message))
     } catch (error: any) {
       toast.error(upperCaseMessage(error))
+    } finally {
+      setActiveId(null);
     }
   }
 
@@ -87,7 +92,11 @@ const LinkCard = ({ item }: { item: ILinks }) => {
           onClick={handleDelete}
           className="p-2.5 rounded-lg border border-gray/20 text-red-500 hover:opacity-70 transition-all cursor-pointer bg-slate-50/50"
         >
-          <FaRegTrashAlt className="text-sm" />
+          {activeId ? (
+            <FaSpinner className="text-xl animate-spin" />
+          ) : (
+            <FaRegTrashAlt className="text-sm" />
+          )}
         </button>
       </div>
     </div>
