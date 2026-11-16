@@ -4,7 +4,7 @@ import { IoLink } from "react-icons/io5";
 import { Link } from "react-router";
 import type { ILinks } from "../../redux/types/link.types";
 import moment from "moment";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppDispatch } from "../../redux/hooks";
 import { deleteLink } from "../../redux/slices/link";
 import { toast } from "react-toastify";
 import { upperCaseMessage } from "../../utils/upperCaseMessage";
