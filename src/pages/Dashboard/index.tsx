@@ -19,8 +19,8 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    !links && dispatch(getUserLinks("links"));
-  }, []);
+    dispatch(getUserLinks("links"));
+  }, [dispatch]);
 
   return (
     <section className="w-full bg-slate-50/90 min-h-dvh">
